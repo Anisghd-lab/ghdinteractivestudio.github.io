@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GHD Interactive Studio | Studio d'Applications Mobiles Android</title>
+    <meta name="description" content="GHD Interactive Studio conçoit des applications mobiles Android immersives, performantes et conformes aux standards Google Play Store.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Local Scripts with CDN Fallback -->
+    <script src="three.min.js"></script>
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>');
+        }
+    </script>
+    <script src="gsap.min.js"></script>
+    <script>
+        if (typeof gsap === 'undefined') {
+            document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"><\/script>');
+        }
+    </script>
+</head>
+<body>
+    <!-- Canvas 3D Background -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- Glassmorphism Navigation -->
+    <nav class="glass-nav">
+        <a href="index.html" class="logo">GHD<span>.</span></a>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active" style="color: #ffffff; text-shadow: 0 0 12px rgba(255, 255, 255, 0.9), 0 0 25px var(--google-blue);">Accueil</a></li>
+            <li><a href="applications.html">Nos Applications <span class="badge-soon">(Coming Soon)</span></a></li>
+            <li><a href="reglementation.html">Réglementation</a></li>
+        </ul>
+        <a href="#contact" class="btn-contact-nav">Contact</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-section">
+        <div class="android-badge">
+            <svg viewBox="0 0 24 24">
+                <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.551 0 .9993.4482.9993.9993 0 .5511-.4483.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9994.4482.9994.9993 0 .5511-.4483.9997-.9994.9997m11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1523-.5676.416.416 0 00-.5676.1523l-2.0223 3.503C15.5902 8.4126 13.8533 8.0833 12 8.0833c-1.8533 0-3.5902.3293-5.1366.8666L4.8411 5.4469a.4161.4161 0 00-.5676-.1523.416.416 0 00-.1523.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.7497h24c-.3432-4.0908-2.6889-7.563-6.1185-9.4283"/>
+            </svg>
+            Studio d'Applications Mobiles Android
+        </div>
+
+        <h1 class="hero-title">
+            GHD <span class="studio-gradient-text">STUDIO</span>
+        </h1>
+
+        <p class="hero-subtitle">
+            Concepteur d'applications mobiles Android haute performance, interactives et immersives. Nous allions puissance technologique et design d'avant-garde pour façonner le futur de l'expérience mobile.
+        </p>
+
+        <div class="hero-cta">
+            <a href="applications.html" class="btn-primary">
+                <span>Découvrir nos applications</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </a>
+            <a href="#contact" class="btn-secondary">Nous Contacter</a>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="section-header">
+            <div class="section-tag">Notre Savoir-Faire</div>
+            <h2 class="section-title">L'Excellence au Cœur de Chaque App</h2>
+        </div>
+
+        <div class="features-grid">
+            <!-- Pillar 1 -->
+            <div class="feature-card" style="--feature-accent: var(--play-green);">
+                <div class="feature-icon-box" style="background: rgba(1, 135, 95, 0.15); color: var(--play-green);">
+                    ⚡
+                </div>
+                <h3>Expériences 3D & Immersives</h3>
+                <p>Intégration d'effets visuels de pointe, de micro-interactions et de moteurs graphiques légers pour offrir des applications uniques et mémorables.</p>
+            </div>
+
+            <!-- Pillar 2 -->
+            <div class="feature-card" style="--feature-accent: var(--google-blue);">
+                <div class="feature-icon-box" style="background: rgba(0, 86, 145, 0.2); color: #38bdf8;">
+                    📱
+                </div>
+                <h3>Ingénierie Native Android</h3>
+                <p>Développement optimisé pour les architectures modernes Android, garantissant une fluidité 120Hz, une autonomie batterie préservée et une stabilité irréprochable.</p>
+            </div>
+
+            <!-- Pillar 3 -->
+            <div class="feature-card" style="--feature-accent: var(--google-red);">
+                <div class="feature-icon-box" style="background: rgba(234, 67, 53, 0.15); color: var(--google-red);">
+                    🛡️
+                </div>
+                <h3>Conformité Google Play</h3>
+                <p>Respect scrupuleux des exigences de publication du Play Store, de la protection des données personnelles (RGPD) et des normes de sécurité les plus strictes.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="contact-container">
+            <h2 class="contact-title">Nous Contacter</h2>
+            <p class="contact-subtitle">Vous avez une question, une idée de projet ou une demande de partenariat ? Envoyez-nous un message.</p>
+
+            <form class="contact-form" onsubmit="event.preventDefault(); alert('Merci pour votre message ! L\'équipe GHD Interactive Studio vous répondra rapidement.'); this.reset();">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Nom & Prénom</label>
+                        <input type="text" id="name" class="form-control" placeholder="Votre nom" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Adresse Email</label>
+                        <input type="email" id="email" class="form-control" placeholder="exemple@domaine.com" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">Objet</label>
+                    <input type="text" id="subject" class="form-control" placeholder="Sujet de votre demande" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" class="form-control" placeholder="Décrivez votre projet ou votre demande..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn-primary contact-submit-btn">
+                    <span>Envoyer le message</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <a href="index.html" class="logo">GHD<span>.</span></a>
+            <ul class="footer-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="applications.html">Nos Applications</a></li>
+                <li><a href="reglementation.html">Réglementation</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <p class="footer-copy">© 2026 GHD INTERACTIVE STUDIO. Tous droits réservés. Conforme aux standards Google Play Store.</p>
+        </div>
+    </footer>
+
+    <!-- Three.js Interactive Engine -->
+    <script src="main.js"></script>
+
+    <!-- GSAP Entrance Animations -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            gsap.fromTo(".android-badge", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, delay: 0.2 });
+            gsap.fromTo(".hero-title", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1, delay: 0.4 });
+            gsap.fromTo(".hero-subtitle", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1, delay: 0.6 });
+            gsap.fromTo(".hero-cta", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, delay: 0.8 });
+            gsap.fromTo(".feature-card", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, delay: 1 });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nos Applications | GHD Interactive Studio</title>
+    <meta name="description" content="Découvrez le portfolio des applications mobiles Android de GHD Interactive Studio.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Local Scripts with CDN Fallback -->
+    <script src="three.min.js"></script>
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>');
+        }
+    </script>
+    <script src="gsap.min.js"></script>
+    <script>
+        if (typeof gsap === 'undefined') {
+            document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"><\/script>');
+        }
+    </script>
+</head>
+<body>
+    <!-- Canvas 3D Background -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- UI Overlay -->
+    <nav class="glass-nav">
+        <a href="index.html" class="logo" style="text-decoration: none;">GHD<span>.</span></a>
+        <ul class="nav-links">
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="applications.html" style="color: #ffffff; text-shadow: 0 0 12px rgba(255, 255, 255, 0.9), 0 0 25px var(--google-blue);">Nos Applications</a></li>
+            <li><a href="reglementation.html">Réglementation</a></li>
+        </ul>
+        <a href="index.html#contact" class="btn-contact-nav" style="text-decoration: none;">Contact</a>
+    </nav>
+
+    <main class="apps-section">
+        <div class="apps-container">
+            <h1 class="apps-title">Nos <span class="highlight">Applications</span></h1>
+            <p class="apps-subtitle">Découvrez notre portfolio d'applications Android conçues pour l'excellence et l'immersion.</p>
+            
+            <div class="apps-grid">
+                <!-- App 1 -->
+                <div class="app-card">
+                    <div class="app-icon" style="background: linear-gradient(135deg, var(--play-green), var(--google-blue));">🚀</div>
+                    <h3>GHD Connect</h3>
+                    <p>L'application sociale de demain, fluide, ultra-sécurisée et centrée sur la communauté.</p>
+                    <button class="btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.9rem;">En savoir plus</button>
+                </div>
+                
+                <!-- App 2 -->
+                <div class="app-card">
+                    <div class="app-icon" style="background: linear-gradient(135deg, var(--google-red), var(--google-yellow));">👁️</div>
+                    <h3>GHD Vision</h3>
+                    <p>Votre outil ultime de productivité augmentée, fusionnant IA et organisation intuitive.</p>
+                    <button class="btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.9rem;">En savoir plus</button>
+                </div>
+                
+                <!-- App 3 -->
+                <div class="app-card">
+                    <div class="app-icon" style="background: linear-gradient(135deg, var(--google-blue), var(--play-green));">🎮</div>
+                    <h3>GHD Play</h3>
+                    <p>La nouvelle plateforme de divertissement immersif sur mobile pour petits et grands.</p>
+                    <button class="btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.9rem;">En savoir plus</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <a href="index.html" class="logo" style="text-decoration: none;">GHD<span>.</span></a>
+            <ul class="footer-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="applications.html">Nos Applications</a></li>
+                <li><a href="reglementation.html">Réglementation</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+            <p class="footer-copy">© 2026 GHD INTERACTIVE STUDIO. Tous droits réservés. Conforme aux standards Google Play Store.</p>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+    <script>
+        // Custom animation for apps page
+        window.addEventListener('DOMContentLoaded', () => {
+            gsap.fromTo(".apps-title", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1, delay: 0.5 });
+            gsap.fromTo(".apps-subtitle", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1, delay: 0.7 });
+            gsap.fromTo(".app-card", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.2, delay: 0.9 });
+        });
+    </script>
+</body>
+</html>

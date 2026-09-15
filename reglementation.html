@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réglementation & Conformité Google Play | GHD Interactive Studio</title>
+    <meta name="description" content="Politique de confidentialité et conditions d'utilisation de GHD Interactive Studio, conformes aux exigences du Google Play Store et au RGPD.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Local Scripts with CDN Fallback -->
+    <script src="three.min.js"></script>
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>');
+        }
+    </script>
+    <script src="gsap.min.js"></script>
+    <script>
+        if (typeof gsap === 'undefined') {
+            document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"><\/script>');
+        }
+    </script>
+</head>
+<body>
+    <!-- Canvas 3D Background -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- Glassmorphism Navigation -->
+    <nav class="glass-nav">
+        <a href="index.html" class="logo">GHD<span>.</span></a>
+        <ul class="nav-links">
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="applications.html">Nos Applications <span class="badge-soon">(Coming Soon)</span></a></li>
+            <li><a href="reglementation.html" class="active" style="color: #ffffff; text-shadow: 0 0 12px rgba(255, 255, 255, 0.9), 0 0 25px var(--google-blue);">Réglementation</a></li>
+        </ul>
+        <a href="index.html#contact" class="btn-contact-nav">Contact</a>
+    </nav>
+
+    <!-- Policy Section -->
+    <main class="policy-section">
+        <div class="policy-container">
+            <header class="policy-header">
+                <div class="policy-badge">
+                    <span>✓</span> Conforme aux Politiques du Programme pour les Développeurs Google Play
+                </div>
+                <h1 class="policy-title">Politique de Confidentialité & <span class="highlight">Conditions</span></h1>
+                <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">
+                    Dernière mise à jour : 15 Septembre 2026. Ce document régit l'utilisation de nos applications mobiles publiées par GHD Interactive Studio.
+                </p>
+            </header>
+
+            <div class="policy-card">
+                <!-- Section 1 -->
+                <article class="policy-block">
+                    <h2><span>01.</span> Engagement & Champ d'application</h2>
+                    <p>
+                        Chez <strong>GHD Interactive Studio</strong>, la protection de vos données personnelles et le respect de votre vie privée sont au cœur de nos priorités. Cette politique détaille de façon transparente la manière dont nos applications mobiles Android collectent, utilisent et protègent vos informations, en stricte conformité avec le Règlement Général sur la Protection des Données (RGPD) et le règlement du Google Play Store.
+                    </p>
+                </article>
+
+                <!-- Section 2 -->
+                <article class="policy-block">
+                    <h2><span>02.</span> Données Collectées & Section Sécurité des Données</h2>
+                    <p>
+                        Conformément à la section « Sécurité des données » de la console Google Play, nos applications limitent la collecte au strict minimum nécessaire à leur bon fonctionnement :
+                    </p>
+                    <ul>
+                        <li><strong>Données techniques et de diagnostic :</strong> Journaux de plantage (Crashlytics) et métriques de performances pour garantir la stabilité et corriger d'éventuels dysfonctionnements.</li>
+                        <li><strong>Identifiants d'appareil anonymisés :</strong> Utilisés uniquement pour la gestion des sessions locales, la synchronisation du jeu ou les sauvegardes chiffrées.</li>
+                        <li><strong>Données non sensibles :</strong> Aucune coordonnée bancaire ni donnée personnelle sensible (géolocalisation précise en temps réel, carnet d'adresses, etc.) n'est collectée sans votre consentement préalable explicite.</li>
+                    </ul>
+                </article>
+
+                <!-- Section 3 -->
+                <article class="policy-block">
+                    <h2><span>03.</span> Autorisations Système Android (Permissions)</h2>
+                    <p>
+                        Nos applications appliquent le principe du moindre privilège (Least Privilege Principle). Les autorisations requises (comme l'accès réseau ou le vibreur) sont strictement proportionnées aux fonctionnalités de l'application :
+                    </p>
+                    <ul>
+                        <li><code>INTERNET</code> & <code>ACCESS_NETWORK_STATE</code> : Requis pour la synchronisation en ligne des fonctionnalités cloud et l'affichage des contenus mis à jour.</li>
+                        <li><code>VIBRATE</code> : Utilisé pour les retours haptiques immersifs lors des interactions utilisateur.</li>
+                        <li><code>POST_NOTIFICATIONS</code> (Android 13+) : Demandée explicitement via une boîte de dialogue système si l'utilisateur souhaite recevoir des alertes de jeu ou d'actualité.</li>
+                    </ul>
+                </article>
+
+                <!-- Section 4 -->
+                <article class="policy-block">
+                    <h2><span>04.</span> Partenaires Tiers & SDKs Certifiés</h2>
+                    <p>
+                        Certaines applications peuvent intégrer des kits de développement (SDK) tiers rigoureusement audités et conformes aux exigences Google Play :
+                    </p>
+                    <ul>
+                        <li><strong>Google Play Services / Firebase :</strong> Pour l'analyse de performance globale et les sauvegardes dans le cloud.</li>
+                        <li><strong>Google AdMob (le cas échéant) :</strong> Pour la diffusion de publicités respectant les identifiants publicitaires réinitialisables de l'utilisateur (AAID) et les options de suivi personnalisé.</li>
+                    </ul>
+                </article>
+
+                <!-- Section 5 -->
+                <article class="policy-block">
+                    <h2><span>05.</span> Protection des Enfants (COPPA & Famille)</h2>
+                    <p>
+                        GHD Interactive Studio veille attentivement à la sécurité des plus jeunes. Nos applications destinées ou accessibles aux enfants se conforment rigoureusement à la législation COPPA (Children's Online Privacy Protection Act) et aux directives de la politique pour les familles de Google Play. Nous ne collectons aucune information nominative auprès d'enfants sans l'accord vérifiable des parents.
+                    </p>
+                </article>
+
+                <!-- Section 6 -->
+                <article class="policy-block">
+                    <h2><span>06.</span> Vos Droits (Accès, Rectification, Suppression)</h2>
+                    <p>
+                        En vertu des réglementations en vigueur (RGPD, CCPA), tout utilisateur dispose des droits suivants concernant ses données :
+                    </p>
+                    <ul>
+                        <li>Droit d'accès et d'information sur les données traitées.</li>
+                        <li>Droit de rectification et de suppression définitive de son compte ou de ses sauvegardes.</li>
+                        <li>Droit d'opposition à tout profilage ou ciblage publicitaire.</li>
+                    </ul>
+                </article>
+
+                <!-- Section 7 -->
+                <article class="policy-block">
+                    <h2><span>07.</span> Contact & Délégué à la Protection des Données</h2>
+                    <p>
+                        Pour toute question, requête d'exercice de vos droits ou signalement relatif à la conformité de nos applications, vous pouvez contacter notre équipe dédiée :
+                    </p>
+                    <p style="color: #ffffff; background: rgba(255, 255, 255, 0.05); padding: 1rem 1.5rem; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); margin-top: 1rem;">
+                        <strong>GHD Interactive Studio — Conformité & Données</strong><br>
+                        Email : <a href="mailto:privacy@ghd-studio.com" style="color: var(--google-yellow); text-decoration: none;">privacy@ghd-studio.com</a><br>
+                        Support en ligne : Via le formulaire de contact de notre site.
+                    </p>
+                </article>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <a href="index.html" class="logo">GHD<span>.</span></a>
+            <ul class="footer-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="applications.html">Nos Applications</a></li>
+                <li><a href="reglementation.html">Réglementation</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+            <p class="footer-copy">© 2026 GHD INTERACTIVE STUDIO. Tous droits réservés. Conforme aux standards Google Play Store.</p>
+        </div>
+    </footer>
+
+    <!-- Three.js Interactive Engine -->
+    <script src="main.js"></script>
+
+    <!-- GSAP Entrance Animation -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            gsap.fromTo(".policy-header", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, delay: 0.3 });
+            gsap.fromTo(".policy-card", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1, delay: 0.5 });
+        });
+    </script>
+</body>
+</html>
