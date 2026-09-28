@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nos Applications | GHD Interactive Studio</title>
-    <meta name="description" content="Découvrez le portfolio des applications mobiles Android de GHD Interactive Studio.">
+    <title>Nos Applications & Jeux Android | GHD Interactive Studio</title>
+    <meta name="description" content="Découvrez le portfolio des jeux et applications Android de GHD Interactive Studio, dont Lupus Arena et nos futurs titres haute performance.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="style.css?v=20260928c">
     <!-- Local Scripts with CDN Fallback -->
     <script src="three.min.js"></script>
     <script>
@@ -22,50 +23,179 @@
             document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"><\/script>');
         }
     </script>
+    <!-- Anti-flash theme detection -->
+    <script>
+        (function(){
+            try {
+                var s = localStorage.getItem('ghd_theme');
+                var light = s === 'light' || (!s && window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches);
+                if (light) document.documentElement.classList.add('light-mode');
+            } catch(e) {}
+        })();
+    </script>
 </head>
 <body>
     <!-- Canvas 3D Background -->
     <canvas id="webgl-canvas"></canvas>
 
-    <!-- UI Overlay -->
-    <nav class="glass-nav">
-        <a href="index.html" class="logo" style="text-decoration: none;">GHD<span>.</span></a>
-        <ul class="nav-links">
+    <!-- Glassmorphism Navigation -->
+    <nav class="glass-nav" id="mainNav">
+        <a href="index.html" class="logo">GHD<span>.</span></a>
+                <ul class="nav-links">
             <li><a href="index.html">Accueil</a></li>
-            <li><a href="applications.html" style="color: #ffffff; text-shadow: 0 0 12px rgba(255, 255, 255, 0.9), 0 0 25px var(--google-blue);">Nos Applications</a></li>
+            <li><a href="applications.html" class="active" style="color: #ffffff; text-shadow: 0 0 12px rgba(255, 255, 255, 0.9), 0 0 25px var(--google-blue);">Nos Applications</a></li>
             <li><a href="reglementation.html">Réglementation</a></li>
+            <li class="mobile-contact-link"><a href="index.html#contact">Contact</a></li>
         </ul>
-        <a href="index.html#contact" class="btn-contact-nav" style="text-decoration: none;">Contact</a>
+        <div class="nav-controls">
+        <button class="mobile-toggle" aria-label="Menu de navigation"
+            onclick="(function(btn){var nav=btn.closest('nav');nav.classList.toggle('mobile-menu-active');btn.setAttribute('aria-expanded', nav.classList.contains('mobile-menu-active'))})(this)">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <a href="index.html#contact" class="btn-contact-nav">Contact</a>
+                <button class="theme-toggle" id="themeToggle" aria-label="Mode clair" title="Passer en mode clair">
+            <!-- Moon (shown in dark mode) -->
+            <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <!-- Sun (shown in light mode) -->
+            <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+        </button>
+        </div>
     </nav>
 
-    <main class="apps-section">
+    <main class="apps-section" style="padding-top: 130px;">
         <div class="apps-container">
-            <h1 class="apps-title">Nos <span class="highlight">Applications</span></h1>
-            <p class="apps-subtitle">Découvrez notre portfolio d'applications Android conçues pour l'excellence et l'immersion.</p>
-            
+            <div class="section-tag" style="color: var(--play-green); font-size: 0.9rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 0.8rem;">
+                Portfolio & Créations Mobiles
+            </div>
+            <h1 class="apps-title">Nos Applications & <span class="highlight">Jeux Réalisés</span></h1>
+            <p class="apps-subtitle">
+                De la stratégie multijoueur vocale aux aventures immersives et casse-têtes zen, découvrez les projets conçus et propulsés par GHD Interactive Studio.
+            </p>
+
+            <!-- FLAGSHIP PROJECT: LUPUS ARENA -->
+            <div class="featured-project-card" style="margin-bottom: 3.5rem; text-align: left;">
+                <div class="featured-badge-top">
+                    ⭐ Titre Réalisé & Dédié • Lupus Arena (v2.4.4)
+                </div>
+
+                <div class="featured-layout">
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 1.2rem;">
+                            <img src="assets/lupus-arena/icon.png" alt="Lupus Arena Logo" style="width: 72px; height: 72px; border-radius: 18px; border: 2px solid rgba(251, 188, 5, 0.6); box-shadow: 0 8px 25px rgba(0,0,0,0.5);">
+                            <div>
+                                <h2 class="featured-game-title" style="margin: 0; font-size: 2.2rem;">Lupus Arena</h2>
+                                <p style="color: var(--google-yellow); font-weight: 600; font-size: 0.95rem; margin: 0;">Le Jeu du Loup-Garou Vocal & Tactique</p>
+                            </div>
+                        </div>
+
+                        <p class="featured-game-desc">
+                            Une adaptation multijoueur d'élite du célèbre jeu des Loups-Garous. Doté d'un moteur audio temps réel spatialisé <strong>Agora RTC Engine</strong>, d'une synchronisation sub-seconde atomique <strong>Firebase Realtime Database</strong>, et de plus de 30 rôles tactiques aux cartes personnalisées.
+                        </p>
+
+                        <div class="game-tags">
+                            <span class="game-tag tag-accent">🎙️ Voix en Direct Agora</span>
+                            <span class="game-tag tag-accent">⚡ Synchronisation Firebase</span>
+                            <span class="game-tag">👥 6 à 24 Joueurs</span>
+                            <span class="game-tag">🛡️ Salons Sécurisés</span>
+                            <span class="game-tag">🔐 Chiffrement TLS 1.3</span>
+                            <span class="game-tag">📱 Android 7.0+</span>
+                        </div>
+
+                        <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-top: 1rem;">
+                            <a href="lupus-arena.html" class="btn-primary" style="padding: 0.85rem 1.8rem; font-size: 0.95rem;">
+                                <span>Voir la page dédiée du jeu</span>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </a>
+                            <a href="lupus-arena-privacy.html" class="btn-secondary" style="padding: 0.85rem 1.5rem; font-size: 0.95rem;">
+                                <span>Politique Google Play</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="featured-visual-box">
+                        <img src="assets/lupus-arena/screen-lobby.jpg" alt="Lupus Arena Salon Vocal">
+                        <div class="featured-visual-overlay">
+                            <div class="featured-icon-badge">
+                                <img src="assets/lupus-arena/icon.png" alt="Lupus Arena">
+                            </div>
+                            <div>
+                                <h4 style="color: #ffffff; margin: 0; font-size: 1rem;">Interface Salon & Matchmaking</h4>
+                                <small style="color: #cbd5e1;">Attribution secrète des cartes & débats vocaux</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OTHER STUDIO PROJECTS & GAMES -->
+            <div style="text-align: left; margin-bottom: 2rem;">
+                <h2 style="font-size: 1.8rem; font-weight: 800; color: #ffffff;">Autres Créations & Projets en Développement</h2>
+                <p style="color: var(--text-secondary); font-size: 0.95rem;">Découvrez les prochains titres façonnés par notre équipe d'ingénieurs et designers.</p>
+            </div>
+
             <div class="apps-grid">
-                <!-- App 1 -->
+                <!-- Project 1: Beauty in Shadow -->
                 <div class="app-card">
-                    <div class="app-icon" style="background: linear-gradient(135deg, var(--play-green), var(--google-blue));">🚀</div>
-                    <h3>GHD Connect</h3>
-                    <p>L'application sociale de demain, fluide, ultra-sécurisée et centrée sur la communauté.</p>
-                    <button class="btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.9rem;">En savoir plus</button>
+                    <div class="app-icon" style="background: linear-gradient(135deg, #1e1b4b, #4338ca);">🗡️</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <h3 style="margin: 0;">Beauty in Shadow</h3>
+                        <span style="font-size: 0.72rem; padding: 0.2rem 0.6rem; border-radius: 12px; background: rgba(138, 43, 226, 0.2); border: 1px solid rgba(138, 43, 226, 0.4); color: #c084fc; font-weight: 700;">En Développement</span>
+                    </div>
+                    <p>Dual Reign — RPG d'action et d'aventure sombre avec graphismes travaillés, combats dynamiques et narration captivante pour smartphones modernes.</p>
+                    <div class="game-tags" style="margin-bottom: 1.2rem;">
+                        <span class="game-tag">RPG Tactique</span>
+                        <span class="game-tag">Moteur 3D</span>
+                        <span class="game-tag">Android</span>
+                    </div>
+                    <a href="index.html#contact" class="btn-secondary" style="padding: 0.7rem 1.2rem; font-size: 0.85rem; width: 100%; justify-content: center;">Bientôt disponible</a>
                 </div>
-                
-                <!-- App 2 -->
+
+                <!-- Project 2: Block Blast Android -->
                 <div class="app-card">
-                    <div class="app-icon" style="background: linear-gradient(135deg, var(--google-red), var(--google-yellow));">👁️</div>
-                    <h3>GHD Vision</h3>
-                    <p>Votre outil ultime de productivité augmentée, fusionnant IA et organisation intuitive.</p>
-                    <button class="btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.9rem;">En savoir plus</button>
+                    <div class="app-icon" style="background: linear-gradient(135deg, #0284c7, #06b6d4);">🧩</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <h3 style="margin: 0;">Block Blast</h3>
+                        <span style="font-size: 0.72rem; padding: 0.2rem 0.6rem; border-radius: 12px; background: rgba(56, 189, 248, 0.2); border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8; font-weight: 700;">En Optimisation</span>
+                    </div>
+                    <p>Un jeu d'arcade et de puzzle géométrique ultra-satisfaisant, conçu pour des parties courtes, hors-ligne avec combos en cascade et réactivité 120 Hz.</p>
+                    <div class="game-tags" style="margin-bottom: 1.2rem;">
+                        <span class="game-tag">Puzzle & Arcade</span>
+                        <span class="game-tag">Mode Hors-Ligne</span>
+                        <span class="game-tag">Tout Public</span>
+                    </div>
+                    <a href="index.html#contact" class="btn-secondary" style="padding: 0.7rem 1.2rem; font-size: 0.85rem; width: 100%; justify-content: center;">Bientôt sur Google Play</a>
                 </div>
-                
-                <!-- App 3 -->
+
+                <!-- Project 3: Sudoku Premium -->
                 <div class="app-card">
-                    <div class="app-icon" style="background: linear-gradient(135deg, var(--google-blue), var(--play-green));">🎮</div>
-                    <h3>GHD Play</h3>
-                    <p>La nouvelle plateforme de divertissement immersif sur mobile pour petits et grands.</p>
-                    <button class="btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.9rem;">En savoir plus</button>
+                    <div class="app-icon" style="background: linear-gradient(135deg, var(--play-green), #0d9488);">🧠</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <h3 style="margin: 0;">Premium Sudoku</h3>
+                        <span style="font-size: 0.72rem; padding: 0.2rem 0.6rem; border-radius: 12px; background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; font-weight: 700;">Prêt au Déploiement</span>
+                    </div>
+                    <p>Expérience épurée sans publicité intrusive, générant des grilles uniques de débutant à grand maître, avec statistiques détaillées et sauvegarde cloud.</p>
+                    <div class="game-tags" style="margin-bottom: 1.2rem;">
+                        <span class="game-tag">Entraînement Cérébral</span>
+                        <span class="game-tag">Zéro Friction</span>
+                        <span class="game-tag">Conforme RGPD</span>
+                    </div>
+                    <a href="index.html#contact" class="btn-secondary" style="padding: 0.7rem 1.2rem; font-size: 0.85rem; width: 100%; justify-content: center;">Bientôt sur Google Play</a>
                 </div>
             </div>
         </div>
@@ -74,24 +204,24 @@
     <!-- Footer -->
     <footer class="site-footer">
         <div class="footer-content">
-            <a href="index.html" class="logo" style="text-decoration: none;">GHD<span>.</span></a>
+            <a href="index.html" class="logo">GHD<span>.</span></a>
             <ul class="footer-links">
                 <li><a href="index.html">Accueil</a></li>
                 <li><a href="applications.html">Nos Applications</a></li>
+                <li><a href="lupus-arena.html">Lupus Arena</a></li>
                 <li><a href="reglementation.html">Réglementation</a></li>
                 <li><a href="index.html#contact">Contact</a></li>
             </ul>
-            <p class="footer-copy">© 2026 GHD INTERACTIVE STUDIO. Tous droits réservés. Conforme aux standards Google Play Store.</p>
+            <p class="footer-copy">© 2026 GHD INTERACTIVE STUDIO. Tous droits réservés. Contact officiel : <a href="mailto:ghdinteractivestudio@gmail.com" style="color: #cbd5e1; text-decoration: none;">ghdinteractivestudio@gmail.com</a></p>
         </div>
     </footer>
 
-    <script src="main.js"></script>
+    <script src="main.js?v=20260928c"></script>
     <script>
-        // Custom animation for apps page
         window.addEventListener('DOMContentLoaded', () => {
-            gsap.fromTo(".apps-title", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1, delay: 0.5 });
-            gsap.fromTo(".apps-subtitle", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1, delay: 0.7 });
-            gsap.fromTo(".app-card", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.2, delay: 0.9 });
+            gsap.fromTo(".apps-title", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, delay: 0.3 });
+            gsap.fromTo(".featured-project-card", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1, delay: 0.5 });
+            gsap.fromTo(".app-card", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.2, delay: 0.7 });
         });
     </script>
 </body>

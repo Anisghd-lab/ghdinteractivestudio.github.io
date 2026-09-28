@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GHD Interactive Studio | Studio d'Applications Mobiles Android</title>
-    <meta name="description" content="GHD Interactive Studio conçoit des applications mobiles Android immersives, performantes et conformes aux standards Google Play Store.">
+    <meta name="description" content="GHD Interactive Studio conçoit des applications et jeux mobiles Android immersifs, performants et conformes aux standards Google Play Store.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="style.css?v=20260928c">
     <!-- Local Scripts with CDN Fallback -->
     <script src="three.min.js"></script>
     <script>
@@ -22,20 +23,59 @@
             document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"><\/script>');
         }
     </script>
+    <!-- Anti-flash theme detection -->
+    <script>
+        (function(){
+            try {
+                var s = localStorage.getItem('ghd_theme');
+                var light = s === 'light' || (!s && window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches);
+                if (light) document.documentElement.classList.add('light-mode');
+            } catch(e) {}
+        })();
+    </script>
 </head>
 <body>
     <!-- Canvas 3D Background -->
     <canvas id="webgl-canvas"></canvas>
 
     <!-- Glassmorphism Navigation -->
-    <nav class="glass-nav">
+    <nav class="glass-nav" id="mainNav">
         <a href="index.html" class="logo">GHD<span>.</span></a>
-        <ul class="nav-links">
+                <ul class="nav-links">
             <li><a href="index.html" class="active" style="color: #ffffff; text-shadow: 0 0 12px rgba(255, 255, 255, 0.9), 0 0 25px var(--google-blue);">Accueil</a></li>
-            <li><a href="applications.html">Nos Applications <span class="badge-soon">(Coming Soon)</span></a></li>
+            <li><a href="applications.html">Nos Applications</a></li>
             <li><a href="reglementation.html">Réglementation</a></li>
+            <li class="mobile-contact-link"><a href="#contact">Contact</a></li>
         </ul>
+        <div class="nav-controls">
+        <button class="mobile-toggle" id="menuToggle" aria-label="Menu de navigation"
+            onclick="(function(btn){var nav=document.getElementById('mainNav');nav.classList.toggle('mobile-menu-active');btn.setAttribute('aria-expanded', nav.classList.contains('mobile-menu-active'));this})(this)">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
         <a href="#contact" class="btn-contact-nav">Contact</a>
+                <button class="theme-toggle" id="themeToggle" aria-label="Mode clair" title="Passer en mode clair">
+            <!-- Moon (shown in dark mode) -->
+            <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <!-- Sun (shown in light mode) -->
+            <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+        </button>
+        </div>
     </nav>
 
     <!-- Hero Section -->
@@ -52,7 +92,8 @@
         </h1>
 
         <p class="hero-subtitle">
-            Concepteur d'applications mobiles Android haute performance, interactives et immersives. Nous allions puissance technologique et design d'avant-garde pour façonner le futur de l'expérience mobile.
+            Concepteur d'applications mobiles Android haute performance, interactives et immersives. 
+            Nous allions puissance technologique et design d'avant-garde pour façonner le futur de l'expérience mobile sur le Google Play Store.
         </p>
 
         <div class="hero-cta">
@@ -108,7 +149,10 @@
     <section id="contact" class="contact-section">
         <div class="contact-container">
             <h2 class="contact-title">Nous Contacter</h2>
-            <p class="contact-subtitle">Vous avez une question, une idée de projet ou une demande de partenariat ? Envoyez-nous un message.</p>
+            <p class="contact-subtitle">
+                Vous avez une question, une idée de projet ou une demande de partenariat ?<br>
+                Écrivez-nous directement à <a href="mailto:ghdinteractivestudio@gmail.com" style="color: var(--google-yellow); text-decoration: none; font-weight: 700;">ghdinteractivestudio@gmail.com</a> ou via le formulaire ci-dessous.
+            </p>
 
             <form class="contact-form" onsubmit="event.preventDefault(); alert('Merci pour votre message ! L\'équipe GHD Interactive Studio vous répondra rapidement.'); this.reset();">
                 <div class="form-row">
@@ -153,12 +197,14 @@
                 <li><a href="reglementation.html">Réglementation</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
-            <p class="footer-copy">© 2026 GHD INTERACTIVE STUDIO. Tous droits réservés. Conforme aux standards Google Play Store.</p>
+            <p class="footer-copy">
+                © 2026 GHD INTERACTIVE STUDIO. Tous droits réservés. Contact officiel : <a href="mailto:ghdinteractivestudio@gmail.com" style="color: #cbd5e1; text-decoration: none;">ghdinteractivestudio@gmail.com</a>
+            </p>
         </div>
     </footer>
 
     <!-- Three.js Interactive Engine -->
-    <script src="main.js"></script>
+    <script src="main.js?v=20260928c"></script>
 
     <!-- GSAP Entrance Animations -->
     <script>
