@@ -681,13 +681,15 @@ html.light-mode .theme-toggle .icon-moon { display: none; }
     padding: 140px 1.5rem 100px;
     min-height: 100vh;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    width: 100%;
 }
 
 .apps-container {
     max-width: 1200px;
     width: 100%;
+    margin: 0 auto;
     text-align: center;
 }
 
@@ -714,9 +716,12 @@ html.light-mode .theme-toggle .icon-moon { display: none; }
 
 .apps-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 2.2rem;
+    width: 100%;
+    margin: 0 auto;
 }
+
 
 .app-card {
     background: var(--card-bg);
@@ -976,9 +981,420 @@ textarea.form-control {
     font-size: 0.88rem;
 }
 
+/* ==========================================================================
+   Featured Project Banner & Lupus Arena Styling Additions
+   ========================================================================== */
+
+.featured-project-section {
+    padding: 60px 1.5rem 100px;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.featured-project-card {
+    background: linear-gradient(135deg, rgba(20, 24, 38, 0.95), rgba(10, 12, 18, 0.98));
+    border: 1px solid rgba(251, 188, 5, 0.35);
+    border-radius: 28px;
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 35px rgba(251, 188, 5, 0.15);
+    margin: 0 auto 3.5rem;
+    text-align: left;
+    max-width: 1200px;
+    width: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.featured-project-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 28px 70px rgba(0, 0, 0, 0.8), 0 0 40px rgba(251, 188, 5, 0.22);
+}
+
+.featured-project-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #ea4335, #fbbc05, #01875f, #005691);
+}
+
+.featured-badge-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.45rem 1.2rem;
+    background: rgba(251, 188, 5, 0.18);
+    border: 1px solid rgba(251, 188, 5, 0.6);
+    color: var(--google-yellow);
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 1.8rem;
+}
+
+.featured-layout {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+.featured-game-title {
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-weight: 900;
+    margin-bottom: 0.8rem;
+    letter-spacing: -0.5px;
+    color: #ffffff;
+}
+
+.featured-game-desc {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 1.8rem;
+}
+
+.game-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+}
+
+.game-tag {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    color: #e2e8f0;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.game-tag.tag-accent {
+    border-color: rgba(1, 135, 95, 0.5);
+    background: rgba(1, 135, 95, 0.15);
+    color: #34d399;
+}
+
+.game-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.2rem;
+}
+
+.game-stat-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.game-stat-num {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--google-yellow);
+    display: block;
+}
+
+.game-stat-label {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.featured-visual-box {
+    position: relative;
+    border-radius: 22px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+    background: #000000;
+    width: 100%;
+}
+
+.featured-visual-box img {
+    width: 100%;
+    height: auto;
+    max-height: 440px;
+    display: block;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.featured-visual-box:hover img {
+    transform: scale(1.03);
+}
+
+.featured-visual-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.85) 70%);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.featured-icon-badge {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+    border: 2px solid rgba(251, 188, 5, 0.6);
+    flex-shrink: 0;
+}
+
+.featured-icon-badge img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Dedicated Game Page (lupus-arena.html) */
+.game-header {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto 3rem;
+}
+
+.game-hero-icon {
+    width: 110px;
+    height: 110px;
+    border-radius: 26px;
+    margin: 0 auto 1.5rem;
+    border: 3px solid rgba(251, 188, 5, 0.7);
+    box-shadow: 0 15px 35px rgba(251, 188, 5, 0.35);
+    overflow: hidden;
+    display: block;
+}
+
+.game-hero-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.game-quick-nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 3rem;
+    position: sticky;
+    top: 90px;
+    z-index: 50;
+    background: rgba(10, 13, 20, 0.85);
+    backdrop-filter: blur(14px);
+    padding: 0.8rem 1rem;
+    border-radius: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 950px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.game-quick-nav a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    transition: all 0.25s ease;
+}
+
+.game-quick-nav a:hover,
+.game-quick-nav a.active {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
+/* Cards Showcase Grid */
+.cards-showcase-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.role-card-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    overflow: hidden;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+}
+
+.role-card-item:hover {
+    transform: translateY(-6px);
+    border-color: rgba(251, 188, 5, 0.6);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+}
+
+.role-card-thumb {
+    width: 100%;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    position: relative;
+    background: #000;
+}
+
+.role-card-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.role-card-item:hover .role-card-thumb img {
+    transform: scale(1.08);
+}
+
+.role-card-name {
+    padding: 0.8rem 0.6rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.role-card-faction {
+    font-size: 0.75rem;
+    display: block;
+    margin-top: 2px;
+}
+
+.faction-village {
+    color: #38bdf8;
+}
+
+.faction-wolf {
+    color: #ef4444;
+}
+
+.faction-solo {
+    color: #eab308;
+}
+
+/* Google Play Data Safety Table */
+.data-safety-card {
+    background: rgba(14, 18, 28, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 1.5rem;
+}
+
+.data-table-responsive {
+    overflow-x: auto;
+    width: 100%;
+}
+
+.data-safety-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.92rem;
+}
+
+.data-safety-table th {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    padding: 1rem 1.2rem;
+    font-weight: 700;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    white-space: nowrap;
+}
+
+.data-safety-table td {
+    padding: 1.1rem 1.2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    color: #cbd5e1;
+    vertical-align: top;
+}
+
+.data-safety-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.compliance-badge-ok {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0.25rem 0.6rem;
+    background: rgba(1, 135, 95, 0.2);
+    border: 1px solid rgba(1, 135, 95, 0.4);
+    color: #34d399;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.compliance-badge-info {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0.25rem 0.6rem;
+    background: rgba(0, 86, 145, 0.2);
+    border: 1px solid rgba(0, 86, 145, 0.4);
+    color: #38bdf8;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.compliance-callout {
+    background: rgba(0, 86, 145, 0.12);
+    border-left: 4px solid var(--google-blue);
+    border-radius: 0 16px 16px 0;
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.compliance-callout.warning {
+    background: rgba(251, 188, 5, 0.1);
+    border-left-color: var(--google-yellow);
+}
+
+.compliance-callout.danger {
+    background: rgba(234, 67, 53, 0.1);
+    border-left-color: var(--google-red);
+}
+
+.compliance-callout h4 {
+    color: #ffffff;
+    font-size: 1.05rem;
+    margin-bottom: 0.4rem;
+}
+
+.compliance-callout p {
+    color: #cbd5e1;
+    font-size: 0.95rem;
+    margin-bottom: 0;
+    line-height: 1.6;
+}
+
 /* =====================================================================
    HAMBURGER TOGGLE BUTTON
    ===================================================================== */
+
 .mobile-toggle {
     display: none;
     background: transparent;
@@ -1086,8 +1502,9 @@ section, .policy-card, .policy-block { scroll-margin-top: 130px; }
     .feature-card { padding: 2rem 1.5rem; }
 
     /* Applications */
-    .apps-section { padding: 120px 1.2rem 60px; align-items: flex-start; }
+    .apps-section { padding: 120px 1.2rem 60px; align-items: center; }
     .apps-grid { grid-template-columns: 1fr; gap: 1.4rem; }
+
     .app-card { padding: 2rem 1.5rem; }
 
     /* Featured Project */
