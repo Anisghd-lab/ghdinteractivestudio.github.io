@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="stylesheet" href="style.css?v=20260928e">
+    <link rel="stylesheet" href="style.css?v=20260928f">
     <script src="three.min.js"></script>
     <script>
         if (typeof THREE === 'undefined') {
@@ -143,34 +143,34 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><code>RECORD_AUDIO</code></td>
-                                    <td>Discussion vocale en temps réel entre joueurs</td>
-                                    <td>Microphone matériel (temps réel, non conservé)</td>
+                                    <td data-label="Permission"><code>RECORD_AUDIO</code></td>
+                                    <td data-label="Finalité">Discussion vocale en temps réel entre joueurs</td>
+                                    <td data-label="Accès">Microphone matériel (temps réel, non conservé)</td>
                                 </tr>
                                 <tr>
-                                    <td><code>INTERNET</code> & <code>ACCESS_NETWORK_STATE</code></td>
-                                    <td>Connexion aux serveurs de jeu et synchronisation de salon</td>
-                                    <td>Réseau TCP/IP & WebSockets sécurisés</td>
+                                    <td data-label="Permission"><code>INTERNET</code> &amp; <code>ACCESS_NETWORK_STATE</code></td>
+                                    <td data-label="Finalité">Connexion aux serveurs de jeu et synchronisation de salon</td>
+                                    <td data-label="Accès">Réseau TCP/IP &amp; WebSockets sécurisés</td>
                                 </tr>
                                 <tr>
-                                    <td><code>BLUETOOTH_CONNECT</code></td>
-                                    <td>Prise en charge des casques sans fil & oreillettes Bluetooth</td>
-                                    <td>Routage audio sans accès aux données personnelles</td>
+                                    <td data-label="Permission"><code>BLUETOOTH_CONNECT</code></td>
+                                    <td data-label="Finalité">Prise en charge des casques sans fil &amp; oreillettes Bluetooth</td>
+                                    <td data-label="Accès">Routage audio sans accès aux données personnelles</td>
                                 </tr>
                                 <tr>
-                                    <td><code>POST_NOTIFICATIONS</code></td>
-                                    <td>Alertes de début de partie ou de tour de vote</td>
-                                    <td>Notifications système (désactivables)</td>
+                                    <td data-label="Permission"><code>POST_NOTIFICATIONS</code></td>
+                                    <td data-label="Finalité">Alertes de début de partie ou de tour de vote</td>
+                                    <td data-label="Accès">Notifications système (désactivables)</td>
                                 </tr>
                                 <tr>
-                                    <td><code>VIBRATE</code></td>
-                                    <td>Retour haptique lors du tirage de rôle secret</td>
-                                    <td>Moteur vibreur uniquement</td>
+                                    <td data-label="Permission"><code>VIBRATE</code></td>
+                                    <td data-label="Finalité">Retour haptique lors du tirage de rôle secret</td>
+                                    <td data-label="Accès">Moteur vibreur uniquement</td>
                                 </tr>
                                 <tr>
-                                    <td><code>WAKE_LOCK</code></td>
-                                    <td>Maintien de l'écran éveillé pendant la partie</td>
-                                    <td>Gestionnaire d'alimentation Android</td>
+                                    <td data-label="Permission"><code>WAKE_LOCK</code></td>
+                                    <td data-label="Finalité">Maintien de l'écran éveillé pendant la partie</td>
+                                    <td data-label="Accès">Gestionnaire d'alimentation Android</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -226,6 +226,6 @@
         </div>
     </footer>
 
-    <script src="main.js?v=20260928e"></script>
+    <script src="main.js?v=20260928f"></script>
 </body>
 </html>
