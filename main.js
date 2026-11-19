@@ -1,380 +1,509 @@
-// GHD Interactive Studio — Neural Network 3D Engine + Theme System
-// v2.0 | Three.js Neural Net | Dark/Light Mode | Mobile Ready
+// ═══════════════════════════════════════════════════════════════
+// CODESTATION & GHD INTERACTIVE STUDIO — CORE ENGINE
+// Three.js 3D Viewport • Scrollytelling • Interactive Estimator
+// ═══════════════════════════════════════════════════════════════
+
+document.addEventListener('DOMContentLoaded', () => {
+    initThreeBackground();
+    initScrollyEngine();
+    initMiniNeuralCanvas();
+    calculateEstimate();
+});
 
 // ═══════════════════════════════════════════════════════════════
-//  THEME PALETTE
+// 1. THREE.JS 3D BACKGROUND ENGINE
 // ═══════════════════════════════════════════════════════════════
-const GHD_THEME = {
-    dark: {
-        node:        0x00f0ff,
-        line:        0x00f0ff,
-        signal:      0xff7b00,
-        nodeSize:    0.07,
-        nodeOpacity: 0.90,
-        lineOpacity: 0.50,
-        blending:    null   // THREE.AdditiveBlending — set after THREE loads
-    },
-    light: {
-        node:        0x2563eb,
-        line:        0x2563eb,
-        signal:      0xea580c,
-        nodeSize:    0.07,
-        nodeOpacity: 0.75,
-        lineOpacity: 0.28,
-        blending:    null   // THREE.NormalBlending — set after THREE loads
-    }
-};
+let scene, camera, renderer, cyberGroup, nodesPoints, lineSegments;
+let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0;
+let ambientLightColor = 0x00d2ff;
 
-// ═══════════════════════════════════════════════════════════════
-//  NEURAL NETWORK 3D
-// ═══════════════════════════════════════════════════════════════
-function initNeuralNetwork() {
+function initThreeBackground() {
     const canvas = document.getElementById('webgl-canvas');
-    if (!canvas) { console.warn('[GHD Neural] Canvas not found'); return; }
-    if (typeof THREE === 'undefined') { console.error('[GHD Neural] Three.js not loaded'); return; }
+    if (!canvas || typeof THREE === 'undefined') return;
 
-    // Fill blending refs now that THREE is loaded
-    GHD_THEME.dark.blending  = THREE.AdditiveBlending;
-    GHD_THEME.light.blending = THREE.NormalBlending;
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.z = 7;
 
-    // ── Scene / Camera / Renderer ───────────────────────────────
-    const scene  = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 100);
-    camera.position.z = 8;
-
-    let renderer;
     try {
         renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
     } catch (e) {
-        console.error('[GHD Neural] WebGL init failed', e);
+        console.warn('WebGL initialization fallback', e);
         return;
     }
+
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // ── Neural Net Group (slightly behind UI) ────────────────────
-    const neuralNetGroup = new THREE.Group();
-    neuralNetGroup.position.z = -1;
-    scene.add(neuralNetGroup);
+    cyberGroup = new THREE.Group();
+    scene.add(cyberGroup);
 
-    // ── Config ───────────────────────────────────────────────────
-    const NODE_COUNT  = 90;          // more nodes = denser network
-    const MAX_DIST    = 1.4;          // shorter synapses (was 2.2)
-    const MAX_SIGNALS = 40;           // many more impulses (was 20)
-    const BOUNDS      = new THREE.Vector3(4.5, 3.5, 2.5);
+    // ── Cybernetic Icosahedron Cage (Central Holo Core) ────────
+    const coreGeo = new THREE.IcosahedronGeometry(2.2, 1);
+    const coreMat = new THREE.MeshBasicMaterial({
+        color: 0x438dff,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.22,
+        blending: THREE.AdditiveBlending
+    });
+    const coreMesh = new THREE.Mesh(coreGeo, coreMat);
+    cyberGroup.add(coreMesh);
 
-    // ── Nodes ────────────────────────────────────────────────────
-    const nodePos = [];
-    const nodeVel = [];
+    // Inner Glowing Core Orb
+    const orbGeo = new THREE.SphereGeometry(1.1, 24, 24);
+    const orbMat = new THREE.MeshBasicMaterial({
+        color: 0x00d2ff,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.18,
+        blending: THREE.AdditiveBlending
+    });
+    const orbMesh = new THREE.Mesh(orbGeo, orbMat);
+    cyberGroup.add(orbMesh);
+
+    // ── Floating Neural Nodes & Synapses ───────────────────────
+    const NODE_COUNT = 80;
+    const BOUNDS = new THREE.Vector3(8, 5, 4);
+    const positions = new Float32Array(NODE_COUNT * 3);
+    const velocities = [];
 
     for (let i = 0; i < NODE_COUNT; i++) {
-        nodePos.push(new THREE.Vector3(
-            (Math.random() - 0.5) * BOUNDS.x * 2,
-            (Math.random() - 0.5) * BOUNDS.y * 2,
-            (Math.random() - 0.5) * BOUNDS.z * 2
-        ));
-        nodeVel.push(new THREE.Vector3(
-            (Math.random() - 0.5) * 0.010,   // faster drift (was 0.006)
-            (Math.random() - 0.5) * 0.010,
-            (Math.random() - 0.5) * 0.006
+        const x = (Math.random() - 0.5) * BOUNDS.x * 2;
+        const y = (Math.random() - 0.5) * BOUNDS.y * 2;
+        const z = (Math.random() - 0.5) * BOUNDS.z * 2;
+        positions[i * 3]     = x;
+        positions[i * 3 + 1] = y;
+        positions[i * 3 + 2] = z;
+        velocities.push(new THREE.Vector3(
+            (Math.random() - 0.5) * 0.005,
+            (Math.random() - 0.5) * 0.005,
+            (Math.random() - 0.5) * 0.004
         ));
     }
 
-    const nodeGeoArr = new Float32Array(NODE_COUNT * 3);
-    const nodeGeo    = new THREE.BufferGeometry();
-    nodeGeo.setAttribute('position', new THREE.BufferAttribute(nodeGeoArr, 3));
+    const nodeGeo = new THREE.BufferGeometry();
+    nodeGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
     const nodeMat = new THREE.PointsMaterial({
-        color:       GHD_THEME.dark.node,
-        size:        GHD_THEME.dark.nodeSize,
+        color: 0x00d2ff,
+        size: 0.08,
         transparent: true,
-        opacity:     GHD_THEME.dark.nodeOpacity,
-        blending:    THREE.AdditiveBlending,
-        depthWrite:  false,
-        sizeAttenuation: true
+        opacity: 0.85,
+        blending: THREE.AdditiveBlending
     });
-    const nodePoints = new THREE.Points(nodeGeo, nodeMat);
-    neuralNetGroup.add(nodePoints);
 
-    // ── Synapses ─────────────────────────────────────────────────
-    // Pre-allocate worst-case buffer (N*(N-1)/2 pairs × 2 points × 3 coords)
-    const MAX_LINE_VERTS = Math.ceil(NODE_COUNT * (NODE_COUNT - 1) / 2) * 2;
-    const lineGeoArr     = new Float32Array(MAX_LINE_VERTS * 3);
-    const lineGeo        = new THREE.BufferGeometry();
-    lineGeo.setAttribute('position', new THREE.BufferAttribute(lineGeoArr, 3));
+    nodesPoints = new THREE.Points(nodeGeo, nodeMat);
+    cyberGroup.add(nodesPoints);
+
+    // Synapse Lines
+    const MAX_LINES = 250;
+    const linePositions = new Float32Array(MAX_LINES * 2 * 3);
+    const lineGeo = new THREE.BufferGeometry();
+    lineGeo.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
 
     const lineMat = new THREE.LineBasicMaterial({
-        color:       GHD_THEME.dark.line,
+        color: 0x438dff,
         transparent: true,
-        opacity:     GHD_THEME.dark.lineOpacity,
-        blending:    THREE.AdditiveBlending,
-        depthWrite:  false
+        opacity: 0.25,
+        blending: THREE.AdditiveBlending
     });
-    const lineSegs = new THREE.LineSegments(lineGeo, lineMat);
-    neuralNetGroup.add(lineSegs);
 
-    // ── Signals (data impulses) ──────────────────────────────────
-    const signals      = [];
-    const signalGeoArr = new Float32Array(MAX_SIGNALS * 3);
-    const signalGeo    = new THREE.BufferGeometry();
-    signalGeo.setAttribute('position', new THREE.BufferAttribute(signalGeoArr, 3));
+    lineSegments = new THREE.LineSegments(lineGeo, lineMat);
+    cyberGroup.add(lineSegments);
 
-    const signalMat = new THREE.PointsMaterial({
-        color:       GHD_THEME.dark.signal,
-        size:        0.15,
-        transparent: true,
-        opacity:     0.95,
-        blending:    THREE.AdditiveBlending,
-        depthWrite:  false,
-        sizeAttenuation: true
+    // Mouse Tracking
+    window.addEventListener('mousemove', (e) => {
+        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+        mouseY = -(e.clientY / window.innerHeight - 0.5) * 2;
     });
-    const signalPts = new THREE.Points(signalGeo, signalMat);
-    neuralNetGroup.add(signalPts);
 
-    // Park all unused signals far off-screen
-    for (let i = 0; i < MAX_SIGNALS; i++) {
-        signalGeoArr[i * 3]     = 999;
-        signalGeoArr[i * 3 + 1] = 999;
-        signalGeoArr[i * 3 + 2] = 999;
-    }
-
-    // ── Active connections (rebuilt each frame) ──────────────────
-    let activeConns = [];
-
-    // ── Pointer interaction ──────────────────────────────────────
-    let targetRotX = 0, targetRotY = 0;
-    let currentRotX = 0, currentRotY = 0;
-
-    function handlePointer(nx, ny) {
-        targetRotY = (nx - 0.5) * 0.7;
-        targetRotX = (ny - 0.5) * 0.45;
-    }
-    window.addEventListener('pointermove', e => {
-        handlePointer(e.clientX / window.innerWidth, e.clientY / window.innerHeight);
-    }, { passive: true });
-    window.addEventListener('touchmove', e => {
-        if (e.touches.length > 0) {
-            handlePointer(e.touches[0].clientX / window.innerWidth, e.touches[0].clientY / window.innerHeight);
-        }
-    }, { passive: true });
-
-    // ── Resize ───────────────────────────────────────────────────
+    // Window Resize
     window.addEventListener('resize', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     });
 
-    // ── Signal spawner ───────────────────────────────────────────
-    function spawnSignal() {
-        if (signals.length >= MAX_SIGNALS || activeConns.length === 0) return;
-        const conn = activeConns[Math.floor(Math.random() * activeConns.length)];
-        signals.push({
-            from:  nodePos[conn.a].clone(),
-            to:    nodePos[conn.b].clone(),
-            t:     0,
-            speed: 0.55 + Math.random() * 0.70   // much faster (was 0.25–0.70)
-        });
-    }
-
-    // ── Expose for theme switcher ────────────────────────────────
-    window._ghdScene = {
-        renderer, scene, camera,
-        nodeMat, lineMat, signalMat,
-        neuralNetGroup
-    };
-
-    // ── Render loop ──────────────────────────────────────────────
-    const clock = new THREE.Clock();
-    let   lastSpawn = 0;
-
+    // Animation Loop
     function animate() {
         requestAnimationFrame(animate);
-        const delta   = clock.getDelta();
-        const elapsed = clock.getElapsedTime();
 
-        // Update node positions (bounce)
-        for (let i = 0; i < NODE_COUNT; i++) {
-            const p = nodePos[i], v = nodeVel[i];
-            p.x += v.x; p.y += v.y; p.z += v.z;
-            if (Math.abs(p.x) > BOUNDS.x) v.x *= -1;
-            if (Math.abs(p.y) > BOUNDS.y) v.y *= -1;
-            if (Math.abs(p.z) > BOUNDS.z) v.z *= -1;
-            nodeGeoArr[i * 3]     = p.x;
-            nodeGeoArr[i * 3 + 1] = p.y;
-            nodeGeoArr[i * 3 + 2] = p.z;
-        }
-        nodeGeo.attributes.position.needsUpdate = true;
+        targetX += (mouseX - targetX) * 0.05;
+        targetY += (mouseY - targetY) * 0.05;
 
-        // Rebuild synapses
-        let vi = 0;
-        activeConns = [];
+        // Subtle Group Rotation & Tilt
+        cyberGroup.rotation.y += 0.002;
+        cyberGroup.rotation.x = targetY * 0.25;
+        cyberGroup.rotation.z = targetX * 0.15;
+
+        coreMesh.rotation.y -= 0.001;
+        coreMesh.rotation.x += 0.0015;
+        orbMesh.rotation.y += 0.003;
+
+        // Animate Nodes Drift
+        const posAttr = nodeGeo.attributes.position;
+        let lineIdx = 0;
+        const linePos = lineGeo.attributes.position.array;
+
         for (let i = 0; i < NODE_COUNT; i++) {
+            let px = posAttr.getX(i) + velocities[i].x;
+            let py = posAttr.getY(i) + velocities[i].y;
+            let pz = posAttr.getZ(i) + velocities[i].z;
+
+            // Bounce on boundary box
+            if (Math.abs(px) > BOUNDS.x) velocities[i].x *= -1;
+            if (Math.abs(py) > BOUNDS.y) velocities[i].y *= -1;
+            if (Math.abs(pz) > BOUNDS.z) velocities[i].z *= -1;
+
+            posAttr.setXYZ(i, px, py, pz);
+
+            // Connect nearby nodes
             for (let j = i + 1; j < NODE_COUNT; j++) {
-                const dx   = nodePos[i].x - nodePos[j].x;
-                const dy   = nodePos[i].y - nodePos[j].y;
-                const dz   = nodePos[i].z - nodePos[j].z;
+                const dx = px - posAttr.getX(j);
+                const dy = py - posAttr.getY(j);
+                const dz = pz - posAttr.getZ(j);
                 const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-                if (dist < MAX_DIST) {
-                    lineGeoArr[vi++] = nodePos[i].x;
-                    lineGeoArr[vi++] = nodePos[i].y;
-                    lineGeoArr[vi++] = nodePos[i].z;
-                    lineGeoArr[vi++] = nodePos[j].x;
-                    lineGeoArr[vi++] = nodePos[j].y;
-                    lineGeoArr[vi++] = nodePos[j].z;
-                    activeConns.push({ a: i, b: j });
+
+                if (dist < 1.6 && lineIdx < MAX_LINES) {
+                    linePos[lineIdx * 6]     = px;
+                    linePos[lineIdx * 6 + 1] = py;
+                    linePos[lineIdx * 6 + 2] = pz;
+                    linePos[lineIdx * 6 + 3] = posAttr.getX(j);
+                    linePos[lineIdx * 6 + 4] = posAttr.getY(j);
+                    linePos[lineIdx * 6 + 5] = posAttr.getZ(j);
+                    lineIdx++;
                 }
             }
         }
-        lineGeo.setDrawRange(0, vi / 3);
+
+        posAttr.needsUpdate = true;
+        lineGeo.setDrawRange(0, lineIdx * 2);
         lineGeo.attributes.position.needsUpdate = true;
-
-        // Spawn signals — 2 per tick, every 0.06s = high activity
-        if (elapsed - lastSpawn > 0.06) {
-            spawnSignal();
-            spawnSignal();   // spawn 2 at once
-            lastSpawn = elapsed;
-        }
-
-        // Update signals
-        const _v3 = new THREE.Vector3();
-        for (let s = signals.length - 1; s >= 0; s--) {
-            signals[s].t += delta * signals[s].speed;
-            if (signals[s].t >= 1) {
-                // Park this slot
-                signalGeoArr[s * 3]     = 999;
-                signalGeoArr[s * 3 + 1] = 999;
-                signalGeoArr[s * 3 + 2] = 999;
-                signals.splice(s, 1);
-                continue;
-            }
-            _v3.lerpVectors(signals[s].from, signals[s].to, signals[s].t);
-            signalGeoArr[s * 3]     = _v3.x;
-            signalGeoArr[s * 3 + 1] = _v3.y;
-            signalGeoArr[s * 3 + 2] = _v3.z;
-        }
-        signalGeo.attributes.position.needsUpdate = true;
-
-        // Smooth rotation + slow auto-drift
-        currentRotX += (targetRotX - currentRotX) * 0.035;
-        currentRotY += (targetRotY - currentRotY) * 0.035;
-        neuralNetGroup.rotation.x = currentRotX;
-        neuralNetGroup.rotation.y = currentRotY + elapsed * 0.035;
 
         renderer.render(scene, camera);
     }
 
     animate();
-    console.log('[GHD Neural] Initialized — nodes:', NODE_COUNT);
 }
 
 // ═══════════════════════════════════════════════════════════════
-//  THEME SYSTEM
+// 2. SCROLLYTELLING ENGINE & AMBIENT COLOR MORPHING
 // ═══════════════════════════════════════════════════════════════
+const STEP_COLORS = {
+    1: { bg: 'radial-gradient(circle at 50% 30%, rgba(67, 141, 255, 0.16) 0%, rgba(0, 210, 255, 0.06) 40%, transparent 75%)', border: '#438DFF' },
+    2: { bg: 'radial-gradient(circle at 50% 30%, rgba(0, 210, 255, 0.18) 0%, rgba(139, 92, 246, 0.08) 40%, transparent 75%)', border: '#00D2FF' },
+    3: { bg: 'radial-gradient(circle at 50% 30%, rgba(16, 185, 129, 0.18) 0%, rgba(45, 212, 191, 0.08) 40%, transparent 75%)', border: '#10B981' },
+    4: { bg: 'radial-gradient(circle at 50% 30%, rgba(251, 191, 36, 0.18) 0%, rgba(248, 113, 113, 0.06) 40%, transparent 75%)', border: '#FBBF24' }
+};
 
-/**
- * Apply theme to CSS (html class) + Three.js materials
- * @param {boolean} isLight
- */
-function updateTheme(isLight) {
-    const html = document.documentElement;
+function initScrollyEngine() {
+    const steps = document.querySelectorAll('.narrative-step');
+    const deviceCard = document.getElementById('device-card');
+    const ambientGlow = document.getElementById('ambient-glow');
 
-    // ── CSS ──────────────────────────────────────────────────────
-    if (isLight) {
-        html.classList.add('light-mode');
-    } else {
-        html.classList.remove('light-mode');
+    if (!steps.length) return;
+
+    const observerOptions = {
+        root: null,
+        rootMargin: '-20% 0px -40% 0px',
+        threshold: 0.2
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const stepNum = parseInt(entry.target.getAttribute('data-step'), 10);
+                activateScrollyStep(stepNum);
+            }
+        });
+    }, observerOptions);
+
+    steps.forEach(step => observer.observe(step));
+}
+
+function activateScrollyStep(stepNum) {
+    // 1. Update narrative steps active class
+    document.querySelectorAll('.narrative-step').forEach(s => {
+        s.classList.toggle('active', parseInt(s.getAttribute('data-step'), 10) === stepNum);
+    });
+
+    // 2. Switch device screen view
+    document.querySelectorAll('.screen-view').forEach(v => v.classList.remove('active'));
+    const targetView = document.getElementById(`view-step-${stepNum}`);
+    if (targetView) targetView.classList.add('active');
+
+    // 3. Dynamic Ambient Glow morphing
+    const ambientGlow = document.getElementById('ambient-glow');
+    const deviceCard = document.getElementById('device-card');
+    if (ambientGlow && STEP_COLORS[stepNum]) {
+        ambientGlow.style.background = STEP_COLORS[stepNum].bg;
+    }
+    if (deviceCard && STEP_COLORS[stepNum]) {
+        deviceCard.style.boxShadow = `0 25px 60px rgba(0, 0, 0, 0.8), 0 0 50px ${STEP_COLORS[stepNum].border}33`;
+        deviceCard.style.borderColor = `${STEP_COLORS[stepNum].border}66`;
     }
 
-    // ── Persist ──────────────────────────────────────────────────
-    try { localStorage.setItem('ghd_theme', isLight ? 'light' : 'dark'); } catch(_) {}
+    // 4. Update Dynamic Island State automatically
+    if (stepNum === 1) setIslandState('STREAMING');
+    else if (stepNum === 2) setIslandState('WORKING');
+    else if (stepNum === 3) setIslandState('COMPLETED');
+    else if (stepNum === 4) setIslandState('READY');
+}
 
-    // ── Three.js materials ───────────────────────────────────────
-    const S = window._ghdScene;
-    if (S && typeof THREE !== 'undefined') {
-        const t = isLight ? GHD_THEME.light : GHD_THEME.dark;
+// ═══════════════════════════════════════════════════════════════
+// 3. DYNAMIC ISLAND STATE MACHINE SIMULATOR
+// ═══════════════════════════════════════════════════════════════
+const ISLAND_STATES = {
+    WORKING: {
+        dotClass: 'dot-green',
+        text: 'WORKING...',
+        badge: '0.4s',
+        consoleText: 'WORKING (Agent executing tool calls)',
+        consoleColor: 'text-emerald'
+    },
+    STREAMING: {
+        dotClass: 'dot-blue',
+        text: 'STREAMING SSE',
+        badge: '128 t/s',
+        consoleText: 'STREAMING (Active token reception)',
+        consoleColor: 'text-cyan'
+    },
+    NEEDS_APPROVAL: {
+        dotClass: 'dot-amber',
+        text: 'NEEDS APPROVAL',
+        badge: 'ACTION REQ',
+        consoleText: 'NEEDS_APPROVAL (Shell exec waiting user confirm)',
+        consoleColor: 'text-amber'
+    },
+    ERROR: {
+        dotClass: 'dot-red',
+        text: 'CLI ERROR',
+        badge: 'CODE 1',
+        consoleText: 'ERROR (Trace analysis triggered)',
+        consoleColor: 'text-danger'
+    },
+    COMPLETED: {
+        dotClass: 'dot-cyan',
+        text: 'DONE',
+        badge: '100%',
+        consoleText: 'COMPLETED (Quality gates passed)',
+        consoleColor: 'text-emerald'
+    },
+    READY: {
+        dotClass: 'dot-dim',
+        text: 'READY',
+        badge: 'IDLE',
+        consoleText: 'READY (Awaiting user prompt)',
+        consoleColor: 'text-slate'
+    }
+};
 
-        S.nodeMat.color.setHex(t.node);
-        S.nodeMat.opacity  = t.nodeOpacity;
-        S.nodeMat.blending = t.blending;
-        S.nodeMat.needsUpdate = true;
+window.setIslandState = function(stateKey) {
+    const island = document.getElementById('hero-dynamic-island');
+    const dot = document.getElementById('island-dot');
+    const text = document.getElementById('island-text');
+    const badge = document.getElementById('island-badge');
+    const consoleState = document.getElementById('console-state');
 
-        S.lineMat.color.setHex(t.line);
-        S.lineMat.opacity  = t.lineOpacity;
-        S.lineMat.blending = t.blending;
-        S.lineMat.needsUpdate = true;
+    const config = ISLAND_STATES[stateKey] || ISLAND_STATES.WORKING;
 
-        S.signalMat.color.setHex(t.signal);
-        S.signalMat.needsUpdate = true;
+    if (island) island.setAttribute('data-state', stateKey);
+    if (dot) dot.className = `island-dot ${config.dotClass}`;
+    if (text) text.innerText = config.text;
+    if (badge) badge.innerText = config.badge;
+    if (consoleState) {
+        consoleState.innerText = config.consoleText;
+        consoleState.className = config.consoleColor;
     }
 
-    // ── Toggle button icon ───────────────────────────────────────
-    document.querySelectorAll('.theme-toggle').forEach(btn => {
-        btn.setAttribute('aria-label', isLight ? 'Mode sombre' : 'Mode clair');
-        btn.title = isLight ? 'Passer en mode sombre' : 'Passer en mode clair';
+    // Update active button state
+    document.querySelectorAll('.state-chip').forEach(btn => {
+        btn.classList.toggle('active', btn.innerText.includes(stateKey));
     });
-}
-
-/**
- * Read saved preference or detect system preference
- * @returns {boolean} isLight
- */
-function detectTheme() {
-    try {
-        const saved = localStorage.getItem('ghd_theme');
-        if (saved === 'light') return true;
-        if (saved === 'dark')  return false;
-    } catch(_) {}
-    // Fallback: system preference (default to dark for studio aesthetic)
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-}
-
-// ── Theme toggle button wiring ────────────────────────────────
-function initThemeToggle() {
-    let isLight = detectTheme();
-    // Apply immediately (suppress flash)
-    updateTheme(isLight);
-
-    document.querySelectorAll('.theme-toggle').forEach(btn => {
-        btn.addEventListener('click', () => {
-            isLight = !isLight;
-            updateTheme(isLight);
-        });
-    });
-}
+};
 
 // ═══════════════════════════════════════════════════════════════
-//  MOBILE NAVIGATION — close on outside tap / link click
+// 4. MINI CORTICAL NEURAL CANVAS (STEP 2 VIEW)
 // ═══════════════════════════════════════════════════════════════
-function initMobileMenu() {
-    const nav = document.getElementById('mainNav') || document.querySelector('.glass-nav');
-    if (!nav) return;
+function initMiniNeuralCanvas() {
+    const canvas = document.getElementById('mini-neural-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = canvas.offsetWidth;
+    let height = canvas.height = canvas.offsetHeight;
 
-    nav.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => {
-            nav.classList.remove('mobile-menu-active');
-        });
+    window.addEventListener('resize', () => {
+        if (!canvas.offsetWidth) return;
+        width = canvas.width = canvas.offsetWidth;
+        height = canvas.height = canvas.offsetHeight;
     });
 
-    document.addEventListener('click', e => {
-        if (!nav.contains(e.target)) {
-            nav.classList.remove('mobile-menu-active');
+    const nodes = [];
+    const colors = ['#00D2FF', '#438DFF', '#10B981', '#FBBF24'];
+
+    for (let i = 0; i < 28; i++) {
+        nodes.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - 0.5) * 0.8,
+            vy: (Math.random() - 0.5) * 0.8,
+            color: colors[i % colors.length],
+            radius: Math.random() * 2.5 + 2
+        });
+    }
+
+    function renderMiniNet() {
+        ctx.clearRect(0, 0, width, height);
+
+        // Connections
+        for (let i = 0; i < nodes.length; i++) {
+            for (let j = i + 1; j < nodes.length; j++) {
+                const dx = nodes[i].x - nodes[j].x;
+                const dy = nodes[i].y - nodes[j].y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < 65) {
+                    ctx.beginPath();
+                    ctx.moveTo(nodes[i].x, nodes[i].y);
+                    ctx.lineTo(nodes[j].x, nodes[j].y);
+                    ctx.strokeStyle = `rgba(0, 210, 255, ${1 - dist / 65})`;
+                    ctx.lineWidth = 0.8;
+                    ctx.stroke();
+                }
+            }
         }
+
+        // Draw Nodes
+        nodes.forEach(n => {
+            n.x += n.vx;
+            n.y += n.vy;
+
+            if (n.x < 0 || n.x > width) n.vx *= -1;
+            if (n.y < 0 || n.y > height) n.vy *= -1;
+
+            ctx.beginPath();
+            ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
+            ctx.fillStyle = n.color;
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = n.color;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        });
+
+        requestAnimationFrame(renderMiniNet);
+    }
+
+    renderMiniNet();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 5. INTERACTIVE CLIENT ESTIMATOR
+// ═══════════════════════════════════════════════════════════════
+let selectedType = 'android';
+let selectedUrgency = 'standard';
+
+window.selectProjectType = function(type, btn) {
+    selectedType = type;
+    document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    calculateEstimate();
+};
+
+window.selectUrgency = function(urgency, btn) {
+    selectedUrgency = urgency;
+    document.querySelectorAll('.urgency-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    calculateEstimate();
+};
+
+window.calculateEstimate = function() {
+    let baseDays = 12;
+    let stackName = "Kotlin, Jetpack Compose, Room SQLite";
+
+    if (selectedType === 'android') {
+        baseDays = 12;
+        stackName = "Kotlin 2.0, Jetpack Compose, Room SQLite, Material 3 Glass";
+    } else if (selectedType === 'web3d') {
+        baseDays = 8;
+        stackName = "HTML5/CSS3, Three.js, GSAP ScrollTrigger, Liquid Glass Obsidian";
+    } else if (selectedType === 'ai') {
+        baseDays = 10;
+        stackName = "Rust, Multi-Agent Swarms, Model Context Protocol (MCP), n8n";
+    } else if (selectedType === 'fullstack') {
+        baseDays = 18;
+        stackName = "Kotlin Compose + Site Web 3D + Backend Rust / Node.js";
+    }
+
+    // Additional modules
+    if (document.getElementById('opt-glass')?.checked) baseDays += 2;
+    if (document.getElementById('opt-3d')?.checked) baseDays += 3;
+    if (document.getElementById('opt-backend')?.checked) baseDays += 4;
+    if (document.getElementById('opt-store')?.checked) baseDays += 2;
+    if (document.getElementById('opt-ai')?.checked) baseDays += 3;
+
+    if (selectedUrgency === 'express') {
+        baseDays = Math.max(6, Math.round(baseDays * 0.7));
+    }
+
+    const estimateTimeEl = document.getElementById('estimate-time');
+    const estimateStackEl = document.getElementById('estimate-stack');
+
+    if (estimateTimeEl) {
+        estimateTimeEl.innerText = `${baseDays - 2} à ${baseDays + 2} Jours`;
+    }
+    if (estimateStackEl) {
+        estimateStackEl.innerText = stackName;
+    }
+};
+
+window.fillContactWithEstimate = function() {
+    const timeText = document.getElementById('estimate-time')?.innerText || "14 jours";
+    const stackText = document.getElementById('estimate-stack')?.innerText || "Kotlin & Compose";
+
+    const textarea = document.getElementById('contact-message');
+    if (textarea) {
+        textarea.value = `Bonjour Anis / GHD Interactive Studio,\n\nJe souhaite concrétiser un projet de type : ${selectedType.toUpperCase()}.\n• Estimation calculée : ${timeText}\n• Stack recommandée : ${stackText}\n• Degré d'urgence : ${selectedUrgency.toUpperCase()}\n\nVoici le résumé de mon besoin : `;
+        textarea.focus();
+    }
+};
+
+// ═══════════════════════════════════════════════════════════════
+// 6. CONTACT TERMINAL & CLIPBOARD
+// ═══════════════════════════════════════════════════════════════
+window.copyContactEmail = function() {
+    const email = "m_ghediri@yahoo.com";
+    navigator.clipboard.writeText(email).then(() => {
+        const btnText = document.getElementById('copy-email-btn-text');
+        if (btnText) {
+            const original = btnText.innerText;
+            btnText.innerText = "✓ Email Copié (m_ghediri@yahoo.com) !";
+            btnText.style.color = "#10B981";
+            setTimeout(() => {
+                btnText.innerText = original;
+                btnText.style.color = "";
+            }, 3000);
+        }
+    }).catch(err => {
+        console.error('Clipboard copy failed', err);
     });
-}
+};
 
-// ═══════════════════════════════════════════════════════════════
-//  BOOT
-// ═══════════════════════════════════════════════════════════════
-function initApp() {
-    initThemeToggle();   // theme first (no flash)
-    initNeuralNetwork(); // then 3D
-    initMobileMenu();    // then nav
-}
+window.handleContactSubmit = function(e) {
+    e.preventDefault();
+    const name = document.getElementById('contact-name')?.value || "Client";
+    const email = document.getElementById('contact-email')?.value || "";
+    const msg = document.getElementById('contact-message')?.value || "";
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initApp);
-} else {
-    initApp();
-}
+    const feedback = document.getElementById('contactFeedback');
+
+    const subject = encodeURIComponent(`[CodeStation Studio] Nouveau Projet - ${name}`);
+    const body = encodeURIComponent(`Nom/Entreprise : ${name}\nEmail de contact : ${email}\n\nDétails du projet :\n${msg}`);
+
+    window.location.href = `mailto:m_ghediri@yahoo.com?subject=${subject}&body=${body}`;
+
+    if (feedback) {
+        feedback.style.display = 'block';
+        feedback.innerHTML = `✓ Votre client email par défaut a été ouvert avec votre message pré-rempli pour <strong>m_ghediri@yahoo.com</strong>. Nous vous répondrons sous 24h !`;
+    }
+};
